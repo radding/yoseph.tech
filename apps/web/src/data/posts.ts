@@ -34,7 +34,7 @@ const PostQuery = z.object({
     posts: z.object({
         nodes: z.array(LightPost),
         pageInfo: z.object({
-            endCursor: z.string(),
+            endCursor: z.string().nullish(),
             hasNextPage: z.boolean(),
             hasPreviousPage: z.boolean(),
             startCursor: z.string(),
@@ -56,7 +56,7 @@ const _fetchAllPosts = async (categoryName?: string) => {
     do {
         const data = await _fetchPosts(cursor, categoryName);
         if (data.pageInfo.hasNextPage) {
-            cursor = data.pageInfo.endCursor;
+            cursor = data.pageInfo.endCursor!;
         } else {
             cursor = undefined;
         }

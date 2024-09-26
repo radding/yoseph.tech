@@ -12,6 +12,7 @@ const config: Config = {
     "p-5",
     "w-2/4",
     "pb-7",
+    "hover:text-blue-700"
   ],
   theme: {
     extend: {

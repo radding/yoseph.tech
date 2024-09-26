@@ -22,6 +22,9 @@ export const Pagination = ({
   if (truncateAt === undefined) {
     truncateAt = Infinity;
   }
+  if (numberOfPages === 1) {
+    return null;
+  }
   for (let ndx = 0; ndx < numberOfPages; ndx++) {
     paginations.push(
       <Link

@@ -5,6 +5,7 @@ import { fetchPost } from "@/data/postQuery";
 import { format } from "date-fns";
 import { notFound } from "next/navigation";
 import { Metadata } from "next";
+import { fetchAllPosts } from "@/data/posts";
 
 type PageProps = {
   params: {
@@ -77,15 +78,27 @@ export async function generateMetadata({
   }
   return {
     title: page?.title,
-    description: page.excerpt.toString(),
+    description: page.rawExcerpt,
     creator: "Yoseph Radding",
     publisher: "Yoseph Radding",
     alternates: {
       canonical: `/${page.categories[0].slug}/${page.slug}`,
     },
     openGraph: {
-      images: page.featuredImage.mediaItemUrl,
+      images: page.featuredImage?.mediaItemUrl,
     },
     authors: [{ name: "Yoseph Radding", url: "https://yoseph.tech/about-me" }],
   };
 }
+
+export async function generateStaticParams(): Promise<PageProps["params"][]> {
+  const posts = await fetchAllPosts();
+  return posts.flatMap((posts) =>
+    posts.map((post) => ({
+      category: post.categories[0].slug,
+      slug: post.slug,
+    }))
+  );
+}
+
+export const revalidate = 43200;

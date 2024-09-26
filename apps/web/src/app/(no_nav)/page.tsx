@@ -2,6 +2,7 @@ import { getHomePageData } from "@/data/getHomePageContent";
 import Image from "next/image";
 import { Link } from "../components/links";
 import { format } from "date-fns";
+import { Metadata } from "next";
 
 export default async function Home() {
   const homePage = await getHomePageData();
@@ -14,7 +15,9 @@ export default async function Home() {
 
         <div>{homePage.hero.content}</div>
 
-        <div className="mb-32 grid text-center lg:mb-0 lg:w-full lg:max-w-5xl lg:grid-cols-4 lg:text-left">
+        <div
+          className={`mb-32 grid text-center lg:mb-0 lg:w-full lg:max-w-5xl lg:grid-cols-4 lg:text-left`}
+        >
           {homePage.hero.buttonGroups.map((button, ndx) => (
             <Link
               key={ndx}
@@ -72,4 +75,12 @@ export default async function Home() {
   );
 }
 
-export const revalidate = 300;
+export const revalidate = 43200;
+
+export async function generateMetadata(): Promise<Metadata> {
+  const homePage = await getHomePageData();
+  return {
+    title: "Yoseph.tech",
+    description: homePage.page_data?.excerpt ?? "My Personal Website",
+  };
+}

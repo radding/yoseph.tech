@@ -1,9 +1,7 @@
 import z from "zod";
-import { DateString, HtmlString, NullishHtmlString } from "./zodutils";
 import { fetchData } from "./fetch";
 import { cache } from "react";
-import { LinkSchema } from "./links";
-import { LightPost } from "./lightPosts";
+import { PageObject } from "./lightPosts";
 
 const query = `
 {
@@ -13,6 +11,11 @@ const query = `
         isActive
         mainPage {
           ... on Page {
+            id
+            status
+            page_data {
+              excerpt
+            }
             hero {
               title
               content
@@ -78,25 +81,7 @@ const HomePageSchema = z.object({
         nodes: z.array(z.object({
             metadata: z.object({
                 isActive: z.boolean(),
-                mainPage: z.object({
-                    hero: z.object({
-                        title: z.string(),
-                        content: NullishHtmlString,
-                        buttonGroups: z.array(LinkSchema.and(z.object({
-                            content: HtmlString,
-                        })))
-                    }),
-                    page_sections: z.object({
-                        sections: z.array(z.object({
-                            title: z.string(),
-                            byline: NullishHtmlString,
-                            posts: z.array(z.object({
-                                post: LightPost,
-                            })).transform(postsObj => postsObj.map(p => p.post)),
-                        }))
-                    }).transform(sections => sections.sections)
-                }),
-                
+                mainPage: PageObject,
             })
         }))
     }).transform(meta => meta.nodes.filter(node => node.metadata.isActive)[0].metadata.mainPage),

@@ -1,6 +1,7 @@
 import { fetchAllPosts } from "@/data/posts";
 import { notFound } from "next/navigation";
 import { PaginatedPosts } from "../pagination";
+import { Metadata } from "next";
 
 type Params = {
   params: {
@@ -20,3 +21,12 @@ export async function generateStaticParams() {
   }
   return allPages;
 }
+
+export async function generateMetadata(params: Params): Promise<Metadata> {
+  return {
+    title: `Page ${params.params.page} of All Posts | Yoseph.tech`,
+    description: "Read all of my posts, sorted in order by date of publish",
+  };
+}
+
+export const revalidate = 43200;

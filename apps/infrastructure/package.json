@@ -5,7 +5,7 @@
     "infrastructure": "bin/infrastructure.js"
   },
   "scripts": {
-    "build": "tsc --no-emit",
+    "build": "tsc --noEmit",
     "watch": "tsc -w",
     "test": "jest",
     "cdk": "cdk"
