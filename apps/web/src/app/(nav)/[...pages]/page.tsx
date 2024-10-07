@@ -21,11 +21,13 @@ export default async function Page(params: { params: { pages: string[] } }) {
           }
         )}
       >
-        <div className="relative z-[-1] flex place-items-center before:absolute before:h-[300px] before:w-full before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-full after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 sm:before:w-[480px] sm:after:w-[240px] before:lg:h-[360px]">
+        <div className="my-6 relative z-[-1] flex place-items-center before:absolute before:h-[300px] before:w-full before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-full after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 sm:before:w-[480px] sm:after:w-[240px] before:lg:h-[360px]">
           <h1 className="text-4xl">{data.hero.title}</h1>
         </div>
 
-        <div className="lg:w-7/12 w-10/12 text-center">{data.hero.content}</div>
+        <div className="lg:w-7/12 w-10/12 text-center prose prose-invert md:prose-xl">
+          {data.hero.content}
+        </div>
 
         <div className="mb-32 grid text-center lg:mb-0 lg:w-full lg:max-w-5xl lg:grid-cols-4 lg:text-left">
           {data.hero.buttonGroups.map((button, ndx) => (
@@ -41,14 +43,16 @@ export default async function Page(params: { params: { pages: string[] } }) {
                   -&gt;
                 </span>
               </h2>
-              <div className="m-0 max-w-[30ch] text-sm opacity-50">
+              <div className="m-0 max-w-[30ch] text-sm opacity-50 ">
                 {button.content}
               </div>
             </Link>
           ))}
         </div>
       </section>
-      <main className="lg:w-7/12 mx-auto pb-5">{data.content}</main>
+      <main className="lg:w-7/12 mx-auto pb-5 prose prose-invert md:prose-xl px-3">
+        {data.content}
+      </main>
     </>
   );
 }
@@ -63,6 +67,11 @@ export async function generateMetadata(props: {
   return {
     title: page.hero.title ?? page.title,
     description: page.page_data?.excerpt,
+    alternates: {
+      canonical: {
+        url: `https://www.yoseph.tech/${props.params.pages.join("/")}`,
+      },
+    },
   };
 }
 

@@ -9,7 +9,14 @@ query ($slug:ID!, $cursor:String){
         title
         slug
         excerpt
+        rawExcerpt: excerpt
         date
+        tags {
+          nodes {
+            slug
+            name
+          }
+        }
         categories {
           nodes {
             slug

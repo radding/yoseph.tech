@@ -11,7 +11,14 @@ query ($after: String, $categoryName: String) {
         title
         slug
         excerpt
+        rawExcerpt: excerpt
         date
+        tags {
+          nodes {
+            name
+            slug
+          }
+        }
         categories {
           nodes {
             name

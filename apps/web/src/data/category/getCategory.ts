@@ -48,11 +48,13 @@ const _fetchPages = async (slug: string, type: "categories" | "tags"): Promise<C
     }
 }
 
-export const getCategory = cache(async (categorySlug: string, type: "categories" | "tags"): Promise<Category | null> => {
+export const getCategoryNoCache = async (categorySlug: string, type: "categories" | "tags"): Promise<Category | null> => {
     try {
         return _fetchPages(categorySlug, type);
     } catch(e) {
         console.error(`Error fetching category: ${e}`);
         return null;
     }
-})
+}
+
+export const getCategory = cache(getCategoryNoCache)

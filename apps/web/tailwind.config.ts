@@ -12,7 +12,11 @@ const config: Config = {
     "p-5",
     "w-2/4",
     "pb-7",
-    "hover:text-blue-700"
+    "hover:text-blue-700",
+    "text-5xl",
+    "list-decimal",
+    "list-disc",
+    "px-6",
   ],
   theme: {
     extend: {
@@ -23,6 +27,8 @@ const config: Config = {
       },
     },
   },
-  plugins: [],
+  plugins: [
+    require("@tailwindcss/typography")
+  ],
 };
 export default config;

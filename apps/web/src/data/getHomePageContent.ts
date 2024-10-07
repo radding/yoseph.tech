@@ -56,7 +56,14 @@ const query = `
                       title
                       slug
                       excerpt
+                      rawExcerpt: excerpt
                       date
+                      tags {
+                        nodes {
+                          slug
+                          name
+                        }
+                      }
                       categories {
                         nodes {
                           name

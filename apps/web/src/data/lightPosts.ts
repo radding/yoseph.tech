@@ -6,8 +6,15 @@ export const LightPost = z.object({
     title: z.string(),
     slug: z.string(),
     excerpt: HtmlString,
+    rawExcerpt: z.string(),
     date: DateString,
     categories: z.object({
+        nodes: z.array(z.object({
+            slug: z.string(),
+            name: z.string().optional(),
+        })),
+    }).transform(obj => obj.nodes),
+    tags: z.object({
         nodes: z.array(z.object({
             slug: z.string(),
             name: z.string().optional(),

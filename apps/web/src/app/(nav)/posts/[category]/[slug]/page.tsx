@@ -6,6 +6,8 @@ import { format } from "date-fns";
 import { notFound } from "next/navigation";
 import { Metadata } from "next";
 import { fetchAllPosts } from "@/data/posts";
+import PrismLoader from "@/app/prism";
+import { LatestPosts } from "@/app/components/LatestPosts";
 
 type PageProps = {
   params: {
@@ -21,7 +23,7 @@ export default async function Page(props: PageProps) {
   }
   return (
     <main>
-      <article className="md:mt-[20vh] mt-[30vh]">
+      <article className="md:mt-[20vh]">
         <div className="text-center pt-10 md:px-[20rem]">
           <h1 className="text-4xl mb-5">{post.title}</h1>
           <p className="text-sm mb-5">
@@ -32,20 +34,25 @@ export default async function Page(props: PageProps) {
                 linkType: "internal-taxonomy",
                 text: "",
               }}
-              className="hover:text-indigo-400"
+              className="hover:text-indigo-400 text-green-400"
             >
               {post.categories[0].name}
             </Link>
           </p>
-          <div className="bg-white text-black md:pb-10 md:pt-10 px-3 md:px-6">
+        </div>
+
+        <div className=" md:pb-10 md:pt-10 px-3 md:px-6">
+          <div className="prose lg:prose-xl mx-auto prose-invert">
             {post.excerpt}
-            <div className="grid grid-cols-2 gap-2 md:grid-cols-4 md:gap-4 mt-6">
+          </div>
+          <div className="pt-6 pb-6 lg:pb-0">
+            <div className="flex justify-center flex-wrap">
               {post.tags.map((tag, ndx) => {
                 return (
                   <NextLink
                     href={`/tags/${tag.slug}`}
                     key={ndx}
-                    className="py-2 px-4 shadow-md text-black no-underline rounded-full bg-indigo-400 font-sans font-semibold text-sm border-blue btn-primary hover:text-white hover:bg-indigo-600 focus:outline-none active:shadow-none mr-2"
+                    className="py-2 px-4 shadow-md text-black no-underline rounded-full bg-indigo-400 font-sans font-semibold text-sm border-blue btn-primary hover:text-white hover:bg-indigo-600 focus:outline-none active:shadow-none mr-2 "
                   >
                     {tag.name}
                   </NextLink>
@@ -55,16 +62,26 @@ export default async function Page(props: PageProps) {
           </div>
         </div>
 
-        <div className="bg-white text-black py-10 md:px-[20rem] px-5">
-          {post.content}
+        <div className="w-full bg-white py-5 ">
+          <div className="prose lg:prose-xl prose-h2:text-center mx-auto px-3">
+            {post.content}
+          </div>
         </div>
       </article>
-      <div className="py-10 md:px-20 px-5">
-        <h3 className="text-3xl">Read More</h3>
+      <div className="py-10 px-5 lg:w-[150ch] mx-auto">
+        <h3 className="text-3xl text-center">Read More Related Posts</h3>
         {post.relatedPosts.map((post, ndx) => (
-          <PostLink post={post} key={ndx} />
+          <div className="max-w-prose" key={ndx}>
+            <PostLink post={post} />
+          </div>
         ))}
+
+        <div className="py-10 px-5 lg:w-[150ch] mx-auto">
+          <h3 className="text-3xl text-center">Read Latest Posts</h3>
+          <LatestPosts />
+        </div>
       </div>
+      <PrismLoader />
     </main>
   );
 }
@@ -76,13 +93,14 @@ export async function generateMetadata({
   if (page === null) {
     return {};
   }
+  console.log("description", page.rawExcerpt);
   return {
     title: page?.title,
-    description: page.rawExcerpt,
+    description: page.rawExcerpt ?? page.exerpt2,
     creator: "Yoseph Radding",
     publisher: "Yoseph Radding",
     alternates: {
-      canonical: `/${page.categories[0].slug}/${page.slug}`,
+      canonical: `https://www.yoseph.tech/posts/${page.categories[0].slug}/${page.slug}`,
     },
     openGraph: {
       images: page.featuredImage?.mediaItemUrl,

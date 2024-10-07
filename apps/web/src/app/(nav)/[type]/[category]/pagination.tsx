@@ -18,8 +18,8 @@ export const PaginatedCategories = async (props: {
   }
   return (
     <div>
-      <main className="py-6 w-9/12 mx-auto">
-        <section>
+      <main className="py-6 lg:w-8/12 mx-auto">
+        <section className="lg:my-20">
           <h1 className="text-6xl text-center">{category.name}</h1>
           <p className="text-2xl text-center mt-3">
             {category.description ??

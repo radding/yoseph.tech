@@ -29,6 +29,11 @@ export async function generateMetadata(params: {
   return {
     title: `${categories.name} | Yoseph.tech`,
     description: categories.description ?? `My thought on ${categories.name}`,
+    alternates: {
+      canonical: {
+        url: `https://www.yoseph.tech/${params.params.type}/${params.params.category}`,
+      },
+    },
   };
 }
 

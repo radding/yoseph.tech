@@ -23,7 +23,7 @@ export const PaginatedPosts = async ({
   const currentPage = allPages[pageNumber - 1];
   return (
     <div className="relative min-h-[90vh]">
-      <main className="mb-5 md:px-20 md:pt-10">
+      <main className="mb-5 md:px-20 md:pt-10 mx-auto lg:w-8/12">
         {currentPage.map((post, ndx) => {
           return <PostLink post={post} key={ndx} />;
         })}

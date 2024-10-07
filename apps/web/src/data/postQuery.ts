@@ -3,7 +3,7 @@ import { DateString, HtmlString, HtmlStringWithReplacer, TailwindifyContent } fr
 import { LightPost } from "./lightPosts";
 import { cache } from "react";
 import { fetchData } from "./fetch";
-import { el } from "date-fns/locale";
+import jsDom from "jsdom";
 
 const query = `
 query($slug: String) {
@@ -26,6 +26,7 @@ query($slug: String) {
     }
     excerpt
     rawExcerpt: excerpt(format:RAW)
+    exerpt2: excerpt
     content(format: RENDERED)
     title(format: RENDERED)
     relatedPosts {
@@ -34,7 +35,14 @@ query($slug: String) {
           title
           slug
           excerpt
+          rawExcerpt: excerpt
           date
+          tags {
+            nodes {
+              slug
+              name
+            }
+          }
           categories {
             nodes {
               slug
@@ -72,7 +80,10 @@ const Post = z.object({
             }),
         }).nullish().transform(f => f?.node),
         excerpt: HtmlString,
-        rawExcerpt: z.string().nullish().transform(x => x ?? ""),
+        rawExcerpt: z.string().nullish(),
+        exerpt2: z.string().transform(x => {
+          return x.replace("<p>", "").replace("</p>", "");
+        }),
         content: TailwindifyContent,
         title: z.string(),
         date: DateString,

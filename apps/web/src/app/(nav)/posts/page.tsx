@@ -11,7 +11,12 @@ export async function generateMetadata(params: {
   return {
     title: `All Posts | Yoseph.tech`,
     description: "Read all of my posts, sorted in order by date of publish",
+    alternates: {
+      canonical: {
+        url: `https://www.yoseph.tech/posts/`,
+      },
+    },
   };
 }
 
-export const revalidate = 43200;
+export const revalidate = 600;
