@@ -29,6 +29,7 @@ query ($uri: String) {
           __typename
           ... on Page {
             slug
+            uri
           }
           ... on Post {
             slug

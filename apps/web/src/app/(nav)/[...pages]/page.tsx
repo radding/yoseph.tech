@@ -1,5 +1,4 @@
 import { Link } from "@/app/components/links";
-import { fetchData } from "@/data/fetch";
 import { getAllPages, getPage } from "@/data/pages/schema";
 import classNames from "classnames";
 import { Metadata } from "next";

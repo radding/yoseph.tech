@@ -4,25 +4,22 @@ import { Metadata } from "next";
 import { fetchData } from "@/data/fetch";
 
 export default async function Page(props: {
-  params: { category: string; page: string; type: "categories" | "tags" };
+  params: { category: string; page: string };
 }) {
   const pageNumber = parseInt(props.params.page);
   return (
     <PaginatedCategories
       pageNumber={pageNumber}
       slug={props.params.category}
-      type={props.params.type}
+      type={"tags"}
     />
   );
 }
 
 export async function generateMetadata(params: {
-  params: { category: string; type: "categories" | "tags" };
+  params: { category: string };
 }): Promise<Metadata> {
-  const categories = await getCategory(
-    params.params.category,
-    params.params.type
-  );
+  const categories = await getCategory(params.params.category, "tags");
   if (!categories) {
     return {};
   }
@@ -31,14 +28,14 @@ export async function generateMetadata(params: {
     description: categories.description ?? `My thought on ${categories.name}`,
     alternates: {
       canonical: {
-        url: `https://www.yoseph.tech/${params.params.type}/${params.params.category}`,
+        url: `https://www.yoseph.tech/tags/${params.params.category}`,
       },
     },
   };
 }
 
 export async function generateStaticParams(): Promise<
-  { category: string; type: "categories" | "tags"; page: string }[]
+  { category: string; page: string }[]
 > {
   const data = await fetchData(`query {
       categories {
@@ -52,16 +49,6 @@ export async function generateStaticParams(): Promise<
         }
       }
     }`);
-  const categoryInfo = await Promise.all(
-    data.data.categories.nodes.map(async (category: { slug: string }) => {
-      const pages = await getCategory(category.slug, "categories");
-      return {
-        type: "categories",
-        category: category.slug,
-        pages: pages?.posts.length,
-      };
-    })
-  );
   const tagInfo = await Promise.all(
     data.data.tags.nodes.map(async (category: { slug: string }) => {
       const pages = await getCategory(category.slug, "tags");
@@ -72,21 +59,10 @@ export async function generateStaticParams(): Promise<
       };
     })
   );
-  const categoryPage: {
-    category: string;
-    type: "categories" | "tags";
-    page: string;
-  }[] = categoryInfo.flatMap((category) => {
-    for (let i = 0; i < category.pages; i++) {
-      return {
-        ...category,
-        page: (i + 1).toString(),
-      };
-    }
-  });
+
   const tagPages: {
     category: string;
-    type: "categories" | "tags";
+    type: "tags";
     page: string;
   }[] = tagInfo.flatMap((category) => {
     for (let i = 0; i < category.pages; i++) {
@@ -96,7 +72,7 @@ export async function generateStaticParams(): Promise<
       };
     }
   });
-  return [...categoryPage, ...tagPages];
+  return [...tagPages];
 }
 
 export const revalidate = 43200;

@@ -4,6 +4,7 @@ const LinkedContentSchema = z.discriminatedUnion("__typename", [
     z.object({
         __typename: z.literal("Page"),
         slug: z.string(),
+        uri: z.string(),
     }),
     z.object({
         __typename: z.literal("Post"),

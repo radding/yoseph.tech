@@ -18,7 +18,7 @@ const generateLink = (
     case "internal-page":
       switch (link.page.__typename) {
         case "Page":
-          return `/${link.page.slug}`;
+          return link.page.uri;
         case "Post":
           return `/posts/${link.page.categories[0].slug}/${link.page.slug}`;
       }

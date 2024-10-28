@@ -4,25 +4,20 @@ import { PaginatedCategories } from "./pagination";
 import { Metadata } from "next";
 import { fetchData } from "@/data/fetch";
 
-export default async function Page(props: {
-  params: { category: string; type: "categories" | "tags" };
-}) {
+export default async function Page(props: { params: { category: string } }) {
   return (
     <PaginatedCategories
       pageNumber={0}
       slug={props.params.category}
-      type={props.params.type}
+      type={"tags"}
     />
   );
 }
 
 export async function generateMetadata(params: {
-  params: { category: string; type: "categories" | "tags" };
+  params: { category: string };
 }): Promise<Metadata> {
-  const categories = await getCategory(
-    params.params.category,
-    params.params.type
-  );
+  const categories = await getCategory(params.params.category, "tags");
   if (!categories) {
     return {};
   }
@@ -31,7 +26,7 @@ export async function generateMetadata(params: {
     description: categories.description ?? `My thought on ${categories.name}`,
     alternates: {
       canonical: {
-        url: `https://www.yoseph.tech/${params.params.type}/${params.params.category}`,
+        url: `https://www.yoseph.tech/tags/${params.params.category}`,
       },
     },
   };
@@ -54,12 +49,7 @@ export async function generateStaticParams(): Promise<
     }`);
 
   return [
-    ...data.data.categories.nodes.map((category: { slug: string }) => ({
-      type: "categories",
-      category: category.slug,
-    })),
     ...data.data.tags.nodes.map((category: { slug: string }) => ({
-      type: "tags",
       category: category.slug,
     })),
   ];
